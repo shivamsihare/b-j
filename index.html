@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Here's My App</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/note.css" >
+
+    <script src = 'js/jquery.js' ></script>
+    <script src = 'js/bootstrap.min.js' ></script>
+    <!-- This defines the top navigator -->
+	<div class = "container-fluid" style="background-color:powderblue;font-size: 120%;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;padding-top:20px;padding-bottom: 20px " >
+		<div class = "row" style="align-content: center">
+			<div class = "col-xs-4">
+				<div class = "row" style="align-content: center">
+					<div class = "col-xs-2" style="padding-right:10px !important;">	<input id="inew" type="image" title="Create New Note" align="right" src="icons/new-note.png" height="30"/></div>
+					<div class = "col-xs-4" style="font-family: 'Comic Sans MS', cursive, sans-serif;font-size: 120%;color:#4285F4;text-align: left;padding-left:0 !important;	"> My Notes </div>
+				</div>
+			</div>
+			<div class = "col-xs-4">
+				<div class = "row">
+					<div class = "col-xs-2" style="padding-right:0 !important;"><input id = "t1" type="image" src="icons/search-icon.png" align="right" height="30"/></div>
+					<div class = "col-xs-10" style="text-align: left;padding-left: 0 !important;padding-right: 0 !important"><input id="i1" type="hidden" style="width:0px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</head>
+
+
+<body style="background-color: #f2f2f2" >
+	<div class="container-fluid" id="myspace"></div>
+	<script src = "js/note-script.js" ></script>
+</body>
+</html>
