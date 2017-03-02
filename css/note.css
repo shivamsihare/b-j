@@ -1,4 +1,23 @@
 .note_menu{
-	position: absolute;
+	margin-left: 30px;
+	margin-top:20px;
 }
 
+input[type="radio"],input[type="checkbox"]{
+	width:25px;
+	height:25px;
+	margin-right:10px;
+	vertical-align: middle;
+}
+
+textarea{
+	font-family: 'Courier New', Courier, 'Lucida Sans Typewriter';
+	font-size: 1.3em;
+	font-weight: bold;
+	border:none;
+	outline:none;
+	resize:none;
+	background-color: transparent;
+	width: 80%;
+	overflow: hidden;
+}
