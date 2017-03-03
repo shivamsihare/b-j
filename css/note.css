@@ -6,8 +6,7 @@
 input[type="radio"],input[type="checkbox"]{
 	width:25px;
 	height:25px;
-	margin-right:10px;
-	vertical-align: middle;
+	vertical-align: top;
 }
 
 textarea{
@@ -18,6 +17,5 @@ textarea{
 	outline:none;
 	resize:none;
 	background-color: transparent;
-	width: 80%;
 	overflow: hidden;
 }

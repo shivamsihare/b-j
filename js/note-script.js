@@ -13,37 +13,44 @@
 	function createNote(){
 		//var htmlString = "<div class='col-xs-12 col-sm-6 col-md-4 col-lg-3'><span height = '450px' style='background-color: blue'></span>";
 		var color = randomElement(arr);
-		var image = $('<input type = "image" class = "note_menu" id = "dl'+count+'" src = "icons/delete.png" height="20px" />');
+		var highestDiv = $("#myspace");
+		var del = $('<input type = "image" class = "note_menu" id = "dl'+count+'" src = "icons/delete.png" height="20px" />');
 		var checkbox = $('<input type = "image" class = "note_menu" id = "cb'+count+'" src = "icons/check-box.png" height="20px" />');
 		var addElement = $('<textarea />',{
 			id:"ta"+count,
 			placeholder: "Type here..",
-			style: "background-color: transparent;border:0px;height:100%;width:100%"
+			rows:1,
+			cols:30,
+			style: "border:0px;height:100%;width:100%"
 		});
 		var radiobutton = $('<input type = "image" class = "note_menu" id = "rb'+count+'" src = "icons/radio-button.png" height="20px"/>');
 		var another_div = $('<div />',{
-			class: "col-xs-12 col-sm-6 col-md-4 col-lg-4",
+			class: "random",
 			id: 'mydiv'+count,
-			style: "padding-left:10px;padding-top:10px;"
+			style: "padding-left:10px;padding-top:10px;display:inline-block"
 		});
 		var div = $('<div />',{
 			id:""+count,
-			style: "background-color: #"+color+";padding-top:50px;padding-bottom:10px;padding-left:10px;padding-right:10px;padding-bottom:60px",
-			height: 300
+			style: "background-color: #"+color+";padding-top:50px;padding-left:10px;padding-right:10px;padding-bottom:30px;display:inline-block",
 		});
 		var content_div = $('<div />',{
 			id:"content"+count,
-			style: "background-color: transparent;height:100%;"
+			style: "background-color:transparent;display:inline-block"
 		});
-
+		var br = $('<br/>');
+		highestDiv.sortable({
+			tolerance:"intersect"
+		});
+		highestDiv.disableSelection(); 
 		
 		addElement.appendTo(content_div);
 		content_div.appendTo(div);
-		image.appendTo(div);
+		br.appendTo(div);
+		del.appendTo(div);
 		checkbox.appendTo(div);
 		radiobutton.appendTo(div);
 		div.appendTo(another_div);
-		another_div.appendTo("#myspace");
+		another_div.appendTo($("#myspace"));
 		count++;
 	}
 
@@ -67,7 +74,9 @@
 				id : "ah-rb"+count,
 				placeholder: "Type here..",
 				rows:1,
+				cols:30
 			});
+			//$('#content'+count).attr(display,"inline-block");
 			addElement.appendTo(elDiv);
 			label.appendTo(elDiv);
 			elDiv.appendTo($("#content"+count));
@@ -85,6 +94,7 @@
 				id : "ah-cb"+count,
 				placeholder: "Type here..",
 				rows:1,
+				cols:30
 			});
 			addElement.appendTo(elDiv);
 			label.appendTo(elDiv);
@@ -101,22 +111,11 @@
 		var h = $(this).height();
 		var y = this.scrollHeight;
 		//console.log(x,h,y);
-		if(x-h>10)$(this).height(this.scrollHeight-error_correction);
-		else {
-			var temp = this.scrollHeight;
-			while(this.scrollHeight-$(this).height()<10){
-				$(this).height(temp);
-				temp-=20;
-			}
-			x = this.scrollHeight;
-			h = $(this).height();
-			if(x-h>10)$(this).height(this.scrollHeight-error_correction);
-		}
+		if(x-h>10)$(this).animate({height:this.scrollHeight-error_correction},10);
 		//console.log($(this).height());
 	});
 
-	$(document).ready(function(){
-
+	$((function(){
 		$("#t1").click(function(){
 			$("#i1").animate({type:"text",width:"100%"},500);
 			$("#i1").focus();
@@ -128,4 +127,4 @@
 		$("#inew").click(function(){
 			createNote();
 		});
-	});
+	}));
