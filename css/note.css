@@ -1,5 +1,5 @@
 .note_menu{
-	margin-left: 30px;
+	margin-left: 10px;
 	margin-top:20px;
 }
 
@@ -17,5 +17,18 @@ textarea{
 	outline:none;
 	resize:none;
 	background-color: transparent;
-	overflow: hidden;
+}
+.main-div{
+	padding-top:50px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:30px;
+	display:inline-block
+}
+
+input.empty {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
 }

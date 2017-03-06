@@ -5,33 +5,59 @@
 	var pink = "ffccff";
 	var black = "cccccc";
 	var arr = [yellow,green,blue,pink,black];
+	var notSame = true;
 
 	function randomElement(arr){
 		return arr[Math.floor(Math.random()*arr.length)];
 	}
 
+
+
+
+
 	function createNote(){
-		//var htmlString = "<div class='col-xs-12 col-sm-6 col-md-4 col-lg-3'><span height = '450px' style='background-color: blue'></span>";
 		var color = randomElement(arr);
 		var highestDiv = $("#myspace");
-		var del = $('<input type = "image" class = "note_menu" id = "dl'+count+'" src = "icons/delete.png" height="20px" />');
-		var checkbox = $('<input type = "image" class = "note_menu" id = "cb'+count+'" src = "icons/check-box.png" height="20px" />');
-		var addElement = $('<textarea />',{
-			id:"ta"+count,
-			placeholder: "Type here..",
-			rows:1,
-			cols:30,
-			style: "border:0px;height:100%;width:100%"
+		var del = $('<input />',{
+			type:"image",
+			class:"note_menu del note-area",
+			id:"dl"+count,
+			src:"icons/delete.png",
+			height:"20px"
 		});
-		var radiobutton = $('<input type = "image" class = "note_menu" id = "rb'+count+'" src = "icons/radio-button.png" height="20px"/>');
+
+		var checkbox = $('<input />',{
+			type:"image",
+			class: "note_menu cb note-area",
+			id : "cb"+count,
+			src : "icons/check-box.png",
+			height:"20px"
+			});
+		var mainText = $('<textarea />',{
+			id:"ta"+count,
+			class:"note note-area",
+			placeholder: "Type here..",
+			style: "border:0px;height:100%;width:100%",
+			cols:30
+		});
+		/*
+		var radiobutton = $('<input />',{
+			type: "image",
+			class: "note_menu",
+			id : "rb"+count,
+			src : "icons/radio-button.png",
+			height:"20px"
+			});
+			*/
 		var another_div = $('<div />',{
-			class: "random",
+			class: "col-xs-12 col-sm-6 col-md-4 col-lg-4 random",
 			id: 'mydiv'+count,
 			style: "padding-left:10px;padding-top:10px;display:inline-block"
 		});
 		var div = $('<div />',{
 			id:""+count,
-			style: "background-color: #"+color+";padding-top:50px;padding-left:10px;padding-right:10px;padding-bottom:30px;display:inline-block",
+			class: "main-div",
+			style: "background-color: #"+color,
 		});
 		var content_div = $('<div />',{
 			id:"content"+count,
@@ -39,47 +65,35 @@
 		});
 		var br = $('<br/>');
 		highestDiv.sortable({
-			tolerance:"intersect"
+			tolerance:"touch"
 		});
+
 		highestDiv.disableSelection(); 
-		
-		addElement.appendTo(content_div);
+		mainText.appendTo(content_div);
 		content_div.appendTo(div);
 		br.appendTo(div);
 		del.appendTo(div);
 		checkbox.appendTo(div);
-		radiobutton.appendTo(div);
+		//radiobutton.appendTo(div);
 		div.appendTo(another_div);
 		another_div.appendTo($("#myspace"));
+		$("#make-note").slideUp("slow");
+		mainText.focus();
 		count++;
 	}
 
-
-	$(document).on('click', '.note_menu', function(event) {
+	$(document).on('mousedown', '.note_menu', function(event) {
+		notSame = false;
+		clickOnNote = true;
+		console.log("Hi"+notSame);
+		//$(document).off("blur",".access");
 		var count = $(this).closest("div").attr("id");
 		var el = $(this).attr("id");
 		var addElement,label;
 		//var color = $("#"+count).css("background-color");
-		if(el.indexOf("dl"+count)!=-1)$("#mydiv"+count).remove();
-		else if(el.indexOf("rb"+count)!=-1){
-			$("#content"+count).empty();
-			var elDiv = $('<div />',{
-				id:"rb"+count,
-				style: "background-color: transparent;display:inline-block"
-			});
-			addElement = $('<input type = "radio" />',{
-			});
-			
-			label=$('<textarea />',{
-				id : "ah-rb"+count,
-				placeholder: "Type here..",
-				rows:1,
-				cols:30
-			});
-			//$('#content'+count).attr(display,"inline-block");
-			addElement.appendTo(elDiv);
-			label.appendTo(elDiv);
-			elDiv.appendTo($("#content"+count));
+		if(el.indexOf("dl"+count)!=-1){
+			$("#mydiv"+count).remove();
+			showNewNoteMenu();
 		}
 		else if(el.indexOf("cb"+count)!=-1){
 			$("#content"+count).empty();
@@ -88,13 +102,15 @@
 				style: "background-color: transparent;display:inline-block"
 			});
 			addElement = $('<input type="checkbox" />',{
+				class:"note-area"
 			});
 			
 			label=$('<textarea/>',{
 				id : "ah-cb"+count,
+				class:"note cb-ta note-area",
 				placeholder: "Type here..",
 				rows:1,
-				cols:30
+				cols:25
 			});
 			addElement.appendTo(elDiv);
 			label.appendTo(elDiv);
@@ -103,28 +119,82 @@
 
 	}); 
 
+function hideNewNoteMenu(){
+	$("#make-note").slideUp("slow");
+}
+
+function showNewNoteMenu(){
+	$("#make-note").slideDown("slow");
+}
+
+//check for focus in note area
+$(document).on("focus",".note-area",function(e){
+	console.log("note focused");
+	hideNewNoteMenu();
+	clickOnNote = true;
+	console.log("note",clickOnNote);
+});
+
+
+
+//check for command save click on note
+$(document).on("keydown",".note",function (e){
+	console.log(e.keyCode,clickOnNote);
+	clickOnCheckbox = false;
+    if ((e.metaKey || e.ctrlKey) && e.keyCode == 83 && clickOnNote) { /*ctrl+s or command+s*/
+        showNewNoteMenu();
+        clickOnNote = false;
+        e.preventDefault();
+        $(".note-area").each(function(){
+        	this.blur();
+        });
+    }
+});
+
+$(document).on("mousedown",function(e){
+	var temp = $(e.target).attr("class");
+	if(temp==undefined)return;
+	if(temp.indexOf("note-area")==-1)notSame = true;
+});
+
+$(document).on("blur mousedown",".note-area",function(e){
+	console.log("blur or focus in note area: ",e.type,clickOnNote,notSame);
+	//checkFocusedItemsForMatch("note-area");
+	if(e.type == "mousedown"){
+		notSame = false;
+		clickOnNote = true;
+	}
+	else if(e.type == 'focusout' && clickOnNote == true && notSame){
+		console.log("Hi inside focusout");
+		showNewNoteMenu();
+		clickOnNote = false;
+		notSame = true;
+	}
+});
+
+$(document).on("keypress",".cb-ta",function(e) {
+    if(e.which == 13) {
+        e.preventDefault();
+        returnKeyPressOnCheckBox();
+    }
+});
 
 	//texarea autoresize
-	$(document).on("keyup","textarea",function(){
-		var error_correction = 3.8;
-		var x = this.scrollHeight;
-		var h = $(this).height();
-		var y = this.scrollHeight;
-		//console.log(x,h,y);
-		if(x-h>10)$(this).animate({height:this.scrollHeight-error_correction},10);
-		//console.log($(this).height());
+	$(document).on("focus","textarea",function(){
+		//console.log("focus");
+		autosize($('textarea'));
+	});
+
+	$("#make-note").on("focus",function(){
+		createNote();
 	});
 
 	$((function(){
-		$("#t1").click(function(){
-			$("#i1").animate({type:"text",width:"100%"},500);
-			$("#i1").focus();
-		})
+		$("#i1").click(function(){
+			$("#i1").animate({type:"text",width:"500px",height:"30px"},500);
+		});
 		$("#i1").blur(function(){
-			$("#i1").animate({width:"0px"},500);
-			$("#i1").hide("slow");
+			$("#i1").animate({type:"text",width:"300px",height:"30px"},500);
 		});
-		$("#inew").click(function(){
-			createNote();
-		});
+
 	}));
