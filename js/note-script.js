@@ -6,6 +6,7 @@
 	var black = "cccccc";
 	var arr = [yellow,green,blue,pink,black];
 	var notSame = true;
+	var checkboxElementCount = 0;
 
 	function randomElement(arr){
 		return arr[Math.floor(Math.random()*arr.length)];
@@ -104,20 +105,63 @@
 			addElement = $('<input type="checkbox" />',{
 				class:"note-area"
 			});
-			
+			var remove = $('<i/>',{
+				class:"fa fa-times",
+				"aria-hidden":"true",
+				style:"font-size:20px;"
+			});
 			label=$('<textarea/>',{
 				id : "ah-cb"+count,
 				class:"note cb-ta note-area",
 				placeholder: "Type here..",
 				rows:1,
-				cols:25
+				cols:22
 			});
 			addElement.appendTo(elDiv);
 			label.appendTo(elDiv);
+			remove.appendTo(elDiv);
 			elDiv.appendTo($("#content"+count));
 		}
 
 	}); 
+
+function addCheckBox(count){
+	var elDiv = $('<div />',{
+				id:"cb"+count,
+				style: "background-color: transparent;display:inline-block"
+			});
+			var addElement = $('<input type="checkbox" />',{
+				class:"note-area"
+			});
+			
+			var label=$('<textarea/>',{
+				id : "ah-cb"+count,
+				class:"note cb-ta note-area",
+				placeholder: "Type here..",
+				rows:1,
+				cols:22
+			});
+			var remove = $('<i/>',{
+				class:"fa fa-times",
+				"aria-hidden":"true",
+				style:"font-size:20px;"
+			});
+			
+			addElement.appendTo(elDiv);
+			label.appendTo(elDiv);
+			console.log("Shivam",count);
+			elDiv.appendTo($("#content"+count));
+			remove.appendTo(elDiv);
+			label.focus();
+			checkboxElementCount++;
+}
+
+function returnKeyPressOnCheckBox(e){
+	var x = $(e.target).attr("id").substr(5);
+	console.log(x,Number(x)+10);
+	addCheckBox(parseInt(x));
+}
+
 
 function hideNewNoteMenu(){
 	$("#make-note").slideUp("slow");
@@ -164,7 +208,7 @@ $(document).on("blur mousedown",".note-area",function(e){
 		notSame = false;
 		clickOnNote = true;
 	}
-	else if(e.type == 'focusout' && clickOnNote == true && notSame){
+	if(e.type == 'focusout' && clickOnNote == true && notSame){
 		console.log("Hi inside focusout");
 		showNewNoteMenu();
 		clickOnNote = false;
@@ -175,7 +219,7 @@ $(document).on("blur mousedown",".note-area",function(e){
 $(document).on("keypress",".cb-ta",function(e) {
     if(e.which == 13) {
         e.preventDefault();
-        returnKeyPressOnCheckBox();
+        returnKeyPressOnCheckBox(e);
     }
 });
 
