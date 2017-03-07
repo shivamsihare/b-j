@@ -5,18 +5,14 @@
 	var pink = "ffccff";
 	var black = "cccccc";
 	var arr = [yellow,green,blue,pink,black];
-	var notSame = true;
-	var checkboxElementCount = 0;
+	var checkboxElementCount = [];
 
 	function randomElement(arr){
 		return arr[Math.floor(Math.random()*arr.length)];
 	}
 
-
-
-
-
 	function createNote(){
+		checkboxElementCount.push(0);
 		var color = randomElement(arr);
 		var highestDiv = $("#myspace");
 		var del = $('<input />',{
@@ -83,10 +79,7 @@
 		count++;
 	}
 
-	$(document).on('mousedown', '.note_menu', function(event) {
-		notSame = false;
-		clickOnNote = true;
-		console.log("Hi"+notSame);
+	$(document).on('click', '.note_menu', function(event) {
 		//$(document).off("blur",".access");
 		var count = $(this).closest("div").attr("id");
 		var el = $(this).attr("id");
@@ -98,31 +91,8 @@
 		}
 		else if(el.indexOf("cb"+count)!=-1){
 			$("#content"+count).empty();
-			var elDiv = $('<div />',{
-				id:"cb"+count,
-				style: "background-color: transparent;display:inline-block"
-			});
-			addElement = $('<input type="checkbox" />',{
-				class:"note-area"
-			});
-			var remove = $('<i/>',{
-				class:"fa fa-times",
-				"aria-hidden":"true",
-				style:"font-size:20px;"
-			});
-			label=$('<textarea/>',{
-				id : "ah-cb"+count,
-				class:"note cb-ta note-area",
-				placeholder: "Type here..",
-				rows:1,
-				cols:22
-			});
-			addElement.appendTo(elDiv);
-			label.appendTo(elDiv);
-			remove.appendTo(elDiv);
-			elDiv.appendTo($("#content"+count));
+			addCheckBox(count);
 		}
-
 	}); 
 
 function addCheckBox(count){
@@ -130,12 +100,13 @@ function addCheckBox(count){
 				id:"cb"+count,
 				style: "background-color: transparent;display:inline-block"
 			});
-			var addElement = $('<input type="checkbox" />',{
+			var addElement = $('<input/>',{
+				type:"checkbox",
 				class:"note-area"
 			});
 			
 			var label=$('<textarea/>',{
-				id : "ah-cb"+count,
+				id : "ah-cb"+count+"-"+checkboxElementCount[count],
 				class:"note cb-ta note-area",
 				placeholder: "Type here..",
 				rows:1,
@@ -149,15 +120,17 @@ function addCheckBox(count){
 			
 			addElement.appendTo(elDiv);
 			label.appendTo(elDiv);
-			console.log("Shivam",count);
 			elDiv.appendTo($("#content"+count));
 			remove.appendTo(elDiv);
+			checkboxElementCount[count]++;
 			label.focus();
-			checkboxElementCount++;
 }
 
 function returnKeyPressOnCheckBox(e){
-	var x = $(e.target).attr("id").substr(5);
+	var id = $(e.target).attr("id");
+	var x = id.indexOf("-",3);
+	console.log('shivam:'+x);
+	x = id.substr(5,x-5);
 	console.log(x,Number(x)+10);
 	addCheckBox(parseInt(x));
 }
@@ -171,23 +144,28 @@ function showNewNoteMenu(){
 	$("#make-note").slideDown("slow");
 }
 
+function clickOnElement(class_name){
+	var target = document.activeElement;
+		console.log("target",target);
+		var cl = $(target).attr("class");
+		console.log(cl);
+		var clickOnEl;
+		clickOnEl = cl&&cl.indexOf(class_name)!=-1;
+		return clickOnEl;
+}
+
 //check for focus in note area
 $(document).on("focus",".note-area",function(e){
 	console.log("note focused");
 	hideNewNoteMenu();
-	clickOnNote = true;
-	console.log("note",clickOnNote);
 });
 
 
 
 //check for command save click on note
-$(document).on("keydown",".note",function (e){
-	console.log(e.keyCode,clickOnNote);
-	clickOnCheckbox = false;
-    if ((e.metaKey || e.ctrlKey) && e.keyCode == 83 && clickOnNote) { /*ctrl+s or command+s*/
+$(document).on("keydown",".note-area",function (e){
+    if ((e.metaKey || e.ctrlKey) && e.keyCode == 83 && clickOnElement("note-area")) { /*ctrl+s or command+s*/
         showNewNoteMenu();
-        clickOnNote = false;
         e.preventDefault();
         $(".note-area").each(function(){
         	this.blur();
@@ -195,25 +173,11 @@ $(document).on("keydown",".note",function (e){
     }
 });
 
-$(document).on("mousedown",function(e){
-	var temp = $(e.target).attr("class");
-	if(temp==undefined)return;
-	if(temp.indexOf("note-area")==-1)notSame = true;
-});
-
-$(document).on("blur mousedown",".note-area",function(e){
-	console.log("blur or focus in note area: ",e.type,clickOnNote,notSame);
-	//checkFocusedItemsForMatch("note-area");
-	if(e.type == "mousedown"){
-		notSame = false;
-		clickOnNote = true;
-	}
-	if(e.type == 'focusout' && clickOnNote == true && notSame){
-		console.log("Hi inside focusout");
+$(document).on("blur",".note-area",function(e){
+	setTimeout(function(){
+	if(e.type == 'focusout' && !clickOnElement("note-area")){
 		showNewNoteMenu();
-		clickOnNote = false;
-		notSame = true;
-	}
+	}},2);
 });
 
 $(document).on("keypress",".cb-ta",function(e) {
@@ -222,7 +186,11 @@ $(document).on("keypress",".cb-ta",function(e) {
         returnKeyPressOnCheckBox(e);
     }
 });
-
+/*
+$("input[type='checkbox']").on("change",function(){
+	$(this).focus();
+});
+*/
 	//texarea autoresize
 	$(document).on("focus","textarea",function(){
 		//console.log("focus");
