@@ -15,19 +15,21 @@
     <script src = 'js/bootstrap.min.js' ></script>
     <script src = 'js/jquery-ui.js' ></script>
     <script src = 'js/autosize.js'></script>
+	<script src = 'js/jquery.live.search.min.js'></script>
+	<script src = 'js/jquery.hideseek.min.js'></script>
     <!-- This defines the top navigator -->
 	<div class = "container-fluid" style="background-color:powderblue;font-size: 120%;font-family: 'Font Awesome',Helvetica,Arial,sans-serif;padding-top:20px;padding-bottom: 20px " >
 		<div class = "row" style="align-content: center">
 			<div class = "col-xs-4">
 				<div class = "row" style="align-content: center">
-					<div class = "col-xs-2" style="padding-right:10px !important;">	<input id="inew" type="image" title="Create New Note" align="right" src="icons/new-note.png" height="30"/></div>
+					<div class = "col-xs-2" style="padding-right:0 !important;">	<input id="inew" type="image" title="Create New Note" style="float:right" align="right" src="icons/new-note.png" height="30"/></div>
 					<div class = "col-xs-4" style="font-family: 'Comic Sans MS', cursive, sans-serif;font-size: 120%;color:#4285F4;text-align: left;padding-right:0 !important;	"> My Notes </div>
 				</div>
 			</div>
 			<div class = "col-xs-8">
 				<div class = "row">
-					<div class = "col-xs-10" style="text-align: left;padding-right: 0 !important"><input class="form-control empty" id=i1 iconified  type="text" style="width:300px;height:30px;float:right;" placeholder="&#xF002;" ></div>
-					<div class = "col-xs-1"><i class="fa fa-sticky-note" style="color: blue;font-size: 30px" aria-hidden="true" ></i></div>
+					<div class = "col-xs-10" style="text-align: left;padding-right: 0 !important"><input class="form-control empty" id=i1 iconified  type="text" style="width:60%;height:30px;float:right" placeholder="&#xF002;" ></div>
+					<div class = "col-xs-1"><i class="fa fa-sticky-note" style="color: blue;font-size: 30px;" aria-hidden="true" ></i></div>
 				</div>
 			</div>
 		</div>
@@ -36,14 +38,12 @@
 
 
 <body style="background-color: #a9a9a9" class="unknown">
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 10px;padding-left: 10px;padding-right: 10px;padding-bottom: 10px">
+	<div class="row" id="note-new"></div>
 	<div class="row" id="myspace">
-		<div class="form-group">
-    <input type="text" class="form-control" id="make-note" placeholder="Start Typing..." style="width:600px;display: block;margin:0 auto" />
-  </div>
-	</div>
-</div>
-	<script src = "js/note-script.js" ></script>
 
+	</div>
+	<script src = "js/note-script.js" ></script>
+</div>
 </body>
 </html>

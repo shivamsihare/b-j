@@ -1,20 +1,20 @@
 	var count = 0;
-	var yellow = "ffbb37";
-	var green = "97c800";
-	var blue = "009eea";
-	var pink = "ffccff";
-	var black = "cccccc";
-	var arr = [yellow,green,blue,pink,black];
+	var colObj ={yellow : "ffbb37",
+     green : "97c800",
+     blue : "009eea",
+     pink : "ffccff",
+     black : "cccccc"};
+	var colArr = ["ffbb37","97c800","009eea", "ffccff", "cccccc"];
 	var checkboxElementCount = [];
 
 	function randomElement(arr){
 		return arr[Math.floor(Math.random()*arr.length)];
 	}
 
-	function createNote(){
-		checkboxElementCount.push(0);
-		var color = randomElement(arr);
+	function createNote(content){
+		console.log($("#content"+(count-1)));
 		var highestDiv = $("#myspace");
+		var color = randomElement(colArr);
 		var del = $('<input />',{
 			type:"image",
 			class:"note_menu del note-area",
@@ -22,82 +22,141 @@
 			src:"icons/delete.png",
 			height:"20px"
 		});
-
-		var checkbox = $('<input />',{
-			type:"image",
-			class: "note_menu cb note-area",
-			id : "cb"+count,
-			src : "icons/check-box.png",
-			height:"20px"
-			});
-		var mainText = $('<textarea />',{
-			id:"ta"+count,
-			class:"note note-area",
-			placeholder: "Type here..",
-			style: "border:0px;height:100%;width:100%",
-			cols:30
-		});
-		/*
-		var radiobutton = $('<input />',{
-			type: "image",
-			class: "note_menu",
-			id : "rb"+count,
-			src : "icons/radio-button.png",
-			height:"20px"
-			});
-			*/
 		var another_div = $('<div />',{
-			class: "col-xs-12 col-sm-6 col-md-4 col-lg-4 random",
+			class: "",
 			id: 'mydiv'+count,
-			style: "padding-left:10px;padding-top:10px;display:inline-block"
+			style: "padding-left:10px;padding-top:10px;display:inline-block;"
 		});
 		var div = $('<div />',{
 			id:""+count,
 			class: "main-div",
-			style: "background-color: #"+color,
+			style: "display:inline-block;padding-top: 10px;padding-left: 10px;padding-right: 10px;padding-bottom: 10px;background-color: #"+color,
 		});
-		var content_div = $('<div />',{
-			id:"content"+count,
-			style: "background-color:transparent;display:inline-block"
-		});
+		content.attr("style",{"background-color":color});
 		var br = $('<br/>');
 		highestDiv.sortable({
 			tolerance:"touch"
 		});
 
-		highestDiv.disableSelection(); 
-		mainText.appendTo(content_div);
-		content_div.appendTo(div);
+		highestDiv.disableSelection();
+		content.appendTo(div);
 		br.appendTo(div);
 		del.appendTo(div);
-		checkbox.appendTo(div);
 		//radiobutton.appendTo(div);
 		div.appendTo(another_div);
-		another_div.appendTo($("#myspace"));
-		$("#make-note").slideUp("slow");
-		mainText.focus();
-		count++;
+        showMainText();
+        another_div.appendTo($("#myspace"));//.prepend(another_div);
+        autosize($('textarea'));
 	}
+
+
+	function showMainText() {
+        checkboxElementCount.push(0);
+        var highestDiv = $("#myspace");
+
+        var contentDiv = $("<div/>",{
+        	class: "col-xs-12 col-sm-6 col-md-offset-4 random",
+            id:"content"+count,
+            style: "background-color:#"+colObj["black"]+";padding-top: 10px;padding-left: 10px;padding-right: 10px;padding-bottom: 10px"
+		});
+
+        var mainText = $('<textarea />',{
+            id:"ta"+count,
+            class:"note note-area",
+            placeholder: "Type here..",
+            style: "border:0px;height:100%;width:100%;background-color:transparent",
+            cols:200,
+            rows:1
+        });
+
+        var checkbox = $('<input />',{
+            type:"image",
+            class: "note_menu cb note-area",
+            id : "cb"+count,
+            src : "icons/check-box.png",
+			style:"position:relative;margin-left:10px;margin-top:10px;height:20px;"
+        });
+
+        var next = $('<i />',{
+            id:"done"+count,
+            class:"note_menu fa fa-arrow-circle-right done",
+            "input-type":"hidden",
+            style:"position:relative;margin-left:10px;margin-top:10px;font-size:20px;float:right"
+        });
+        mainText.appendTo(contentDiv);
+        checkbox.appendTo(contentDiv);
+        next.appendTo(contentDiv);
+        ($("#note-new")).prepend(contentDiv);
+        count++;
+    }
+
+	$((function(){
+		showMainText();
+		$("#i1").click(function(){
+			$("#i1").animate({type:"text",width:"100%",height:"30px"},500);
+		});
+		$("#i1").blur(function(){
+			$("#i1").animate({type:"text",width:"60%",height:"30px"},500);
+		});
+
+	}));
+
+
+
+	function saveAndDisplay(){
+        $("#done"+(count-1)).remove();
+        $("#cb"+(count-1)).remove();
+        $("#ta"+(count-1)).attr("cols",22);
+        $(".ah-cb"+(count-1)).attr("cols",22);
+        $("#content"+(count-1)).removeClass("col-xs-12 col-sm-6 col-md-offset-4 random");
+        var content = $("#content"+(count-1)).clone();
+        $("#content"+(count-1)).remove();
+        console.log(content,content.children().length);
+        createNote(content);
+	}
+
+	function returnKeyPressOnSearch() {
+		$("textarea").each(function () {
+			if($(this).text().indexOf($("#i1").text())!=-1){
+				console.log($(this));
+				$(this).css("background-color","yellow");
+			}
+        });
+    }
+
+	$(document).on("click",".done",function(){
+		saveAndDisplay();
+	});
+
+	$(document).on("focus","#make-note",function () {
+		$("#make-note").hide();
+		$(".random").show();
+    });
+
+
+
 
 	$(document).on('click', '.note_menu', function(event) {
 		//$(document).off("blur",".access");
-		var count = $(this).closest("div").attr("id");
 		var el = $(this).attr("id");
 		var addElement,label;
 		//var color = $("#"+count).css("background-color");
-		if(el.indexOf("dl"+count)!=-1){
+		if(el.indexOf("dl")!=-1){
+			var count = Number(el.substr(2));
 			$("#mydiv"+count).remove();
-			showNewNoteMenu();
+    	}
+		if(el.indexOf("cb")!=-1){
+            var count = Number(el.substr(2));
+			console.log(count);
+            $("#ta"+count).remove();
+            $("#cb"+count).remove();
+            addCheckBox(count,40);
 		}
-		else if(el.indexOf("cb"+count)!=-1){
-			$("#content"+count).empty();
-			addCheckBox(count);
-		}
-	}); 
+	});
 
-function addCheckBox(count){
+function addCheckBox(count,textareaSize){
 	var elDiv = $('<div />',{
-				id:"cb"+count,
+				id:"cb"+count+"-"+checkboxElementCount[count],
 				style: "background-color: transparent;display:inline-block"
 			});
 			var addElement = $('<input/>',{
@@ -107,32 +166,43 @@ function addCheckBox(count){
 			
 			var label=$('<textarea/>',{
 				id : "ah-cb"+count+"-"+checkboxElementCount[count],
-				class:"note cb-ta note-area",
+				class:"note cb-ta note-area ah-cb"+count,
 				placeholder: "Type here..",
 				rows:1,
-				cols:22
+				cols:textareaSize
 			});
-			var remove = $('<i/>',{
-				class:"fa fa-times",
-				"aria-hidden":"true",
-				style:"font-size:20px;"
+			var remove = $('<i />',{
+				id:"rem"+count+"-"+checkboxElementCount[count],
+				class:"fa fa-remove note-area",
+				"input-type":"hidden",
+				style:"font-size:20px;display:inline-block;vertical-align:top"
 			});
-			
+			var br = $('<br />',{
+				id:"br"+count+"-"+checkboxElementCount[count]
+			});
+			var done = $("#done"+count).clone();
+			$("#done"+count).remove();
 			addElement.appendTo(elDiv);
 			label.appendTo(elDiv);
-			elDiv.appendTo($("#content"+count));
 			remove.appendTo(elDiv);
+    		elDiv.appendTo($("#content"+count));
+    		br.appendTo($("#content"+count));
+    		done.appendTo($("#content"+count));
 			checkboxElementCount[count]++;
 			label.focus();
+    		autosize($('textarea'));
 }
 
 function returnKeyPressOnCheckBox(e){
 	var id = $(e.target).attr("id");
+	var col = $(e.target).attr("cols");
 	var x = id.indexOf("-",3);
-	console.log('shivam:'+x);
+	//console.log("Enter key press",id,window.count,arg,x,col);
 	x = id.substr(5,x-5);
-	console.log(x,Number(x)+10);
-	addCheckBox(parseInt(x));
+	var count = Number(x);
+	//console.log(x,Number(x)+10,checkboxElementCount[count],$("#ah-cb"+count+"-"+(checkboxElementCount[count]-1)).val().length);
+    if(checkboxElementCount[count]!=0&&$("#ah-cb"+count+"-"+(checkboxElementCount[count]-1)).val().length==0);
+    else addCheckBox(count,col);
 }
 
 
@@ -144,8 +214,12 @@ function showNewNoteMenu(){
 	$("#make-note").slideDown("slow");
 }
 
+$(document).on("focus","#make-note",function () {
+
+});
+
 function clickOnElement(class_name){
-	var target = document.activeElement;
+		var target = document.activeElement;
 		console.log("target",target);
 		var cl = $(target).attr("class");
 		console.log(cl);
@@ -154,30 +228,43 @@ function clickOnElement(class_name){
 		return clickOnEl;
 }
 
-//check for focus in note area
-$(document).on("focus",".note-area",function(e){
-	console.log("note focused");
-	hideNewNoteMenu();
+
+$(document).on("mousedown",".fa-remove",function(e){
+	var x = $(this).attr("id");
+	var dash = x.indexOf('-');
+	var arrValue = x.substr(dash+1);
+	var count = x.substr(3,dash-3);
+	console.log(x,dash,arrValue,count);
+	$("#cb"+count+"-"+arrValue).remove();
+	$("#br"+count+"-"+arrValue).remove();
+	if($("#content"+count).children().length == 1){
+		console.log($("#mydiv"+count));
+		$("#content"+count).remove();
+		showMainText();
+	}
 });
 
-
-
 //check for command save click on note
-$(document).on("keydown",".note-area",function (e){
+$(document).on("keydown",".note",function (e){
+
     if ((e.metaKey || e.ctrlKey) && e.keyCode == 83 && clickOnElement("note-area")) { /*ctrl+s or command+s*/
-        showNewNoteMenu();
+
+        var topNote = $(e.target).closest("div").parent();
+        //console.log("command save",topNote.parent());
         e.preventDefault();
-        $(".note-area").each(function(){
-        	this.blur();
-        });
+        if(topNote.attr("class")=="row"||topNote.parent().attr("class")=="row"){
+			saveAndDisplay();
+		}
     }
 });
 
 $(document).on("blur",".note-area",function(e){
+
+	console.log("inside blur",$(e.target),$(this));
 	setTimeout(function(){
 	if(e.type == 'focusout' && !clickOnElement("note-area")){
 		showNewNoteMenu();
-	}},2);
+	}},1);
 });
 
 $(document).on("keypress",".cb-ta",function(e) {
@@ -186,6 +273,15 @@ $(document).on("keypress",".cb-ta",function(e) {
         returnKeyPressOnCheckBox(e);
     }
 });
+
+
+
+    $(document).on("keypress","#i1",function(e) {
+        if(e.which == 13) {
+            e.preventDefault();
+            returnKeyPressOnSearch(e);
+        }
+    });
 /*
 $("input[type='checkbox']").on("change",function(){
 	$(this).focus();
@@ -196,17 +292,3 @@ $("input[type='checkbox']").on("change",function(){
 		//console.log("focus");
 		autosize($('textarea'));
 	});
-
-	$("#make-note").on("focus",function(){
-		createNote();
-	});
-
-	$((function(){
-		$("#i1").click(function(){
-			$("#i1").animate({type:"text",width:"500px",height:"30px"},500);
-		});
-		$("#i1").blur(function(){
-			$("#i1").animate({type:"text",width:"300px",height:"30px"},500);
-		});
-
-	}));
