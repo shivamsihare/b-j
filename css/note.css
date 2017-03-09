@@ -5,9 +5,9 @@ input[type="radio"],input[type="checkbox"]{
 }
 
 textarea{
-	font-family: 'Courier New', Courier, 'Lucida Sans Typewriter';
+	font-family: 'FontAwesome',cursive;
 	font-size: 1.3em;
-	font-weight: bold;
+	font-weight: normal;
 	border:none;
 	outline:none;
 	resize:none;
@@ -16,7 +16,18 @@ textarea{
 
 input.empty {
     font-family: FontAwesome;
+	font-size: 1em;
     font-style: normal;
     font-weight: normal;
     text-decoration: inherit;
+}
+
+.content{
+	background-color:blanchedalmond;
+	padding :10px;
+}
+.note_menu{
+	padding-top:0;
+	padding-bottom:0;
+	margin-left:30px;
 }

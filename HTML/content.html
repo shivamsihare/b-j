@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Here's My App</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/note.css" rel="stylesheet" type="text/css">
+    <link href="../css/jquery-ui.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+
+    <script src='../js/jquery.js'></script>
+    <script src='../js/bootstrap.min.js'></script>
+    <script src='../js/jquery-ui.js'></script>
+    <script src='../js/autosize.js'></script>
+    <script src='../js/jquery.live.search.min.js'></script>
+    <script src='../js/jquery.hideseek.min.js'></script>
+</head>
+
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-offset-4 content random">
+            <div class="row" style="display: flex;align-items: center">
+            <textarea class="note col-lg-8 note-area"
+                      placeholder="Type here.."
+                      style="border:0px;background-color:transparent"
+                      rows=1></textarea>
+                <input type="image" class="note_menu cb note-area col-lg-1"
+                       id="cb"
+                       src="../icons/check-box.png"
+                       style="height:20px"
+        />
+        <i id="text" class="note_menu fa fa-file-text done col-lg-1"
+                input-type="hidden"
+                style="font-size:20px;">
+                </i>
+
+                <i id="done"
+                   class="note_menu fa fa-arrow-circle-right done col-lg-1"
+                   input-type="hidden"
+                   style="font-size:20px;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
