@@ -13,82 +13,40 @@ function randomElement(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function createNote(content) {
-    console.log($("#content" + (count - 1)));
+function createNote(content,count) {
     var highestDiv = $("#myspace");
     var color = randomElement(COL_ARR);
-    var del = $('<input />', {
-        type: "image",
-        class: "note_menu del note-area",
-        id: "dl" + count,
-        src: "icons/delete.png",
-        height: "20px"
-    });
-    var another_div = $('<div />', {
-        class: "",
-        id: 'mydiv' + count,
-        style: "padding-left:10px;padding-top:10px;display:inline-block;"
-    });
-    var div = $('<div />', {
-        id: "" + count,
-        class: "main-div",
-        style: "display:inline-block;padding-top: 10px;padding-left: 10px;padding-right: 10px;padding-bottom: 10px;background-color: #" + color,
-    });
-    content.attr("style", {"background-color": color});
-    var br = $('<br/>');
     highestDiv.sortable({
         tolerance: "touch"
     });
-
     highestDiv.disableSelection();
-    content.appendTo(div);
-    br.appendTo(div);
-    del.appendTo(div);
-    //radiobutton.appendTo(div);
-    div.appendTo(another_div);
+
+    var noteDiv = $("#mydiv").clone();
+    noteDiv.attr("id",noteDiv.attr("id")+count);
+    noteDiv.children().attr("id",""+count);
+    noteDiv.children().children().each(function () {
+        $(this).attr("id",$(this).attr("id")+count);
+    });
+    noteDiv.children().prepend(content);
     showMainText();
-    another_div.appendTo($("#myspace"));//.prepend(another_div);
+    noteDiv.appendTo(highestDiv);
     autosize($('textarea'));
 }
 
 
 function showMainText() {
     checkboxElementCount.push(0);
-    var highestDiv = $("#myspace");
-
-    var contentDiv = $("<div/>", {
-        class: "col-xs-12 col-sm-6 col-md-offset-4 random",
-        id: "content" + count,
-        style: "background-color:white;padding-top: 10px;padding-left: 10px;padding-right: 10px;padding-bottom: 10px"
+    var htmlContentDiv = $("#content").clone();
+    htmlContentDiv.attr("id",$(htmlContentDiv).attr("id")+count);
+    //console.log('before',htmlContentDiv);
+    htmlContentDiv.children().each(function () {
+        //console.log($(this));
+        if($(this).attr("id").indexOf("text")!=-1)$(this).hide();
+        $(this).attr("id",$(this).attr("id")+count);
     });
-
-    var mainText = $('<textarea />', {
-        id: "ta" + count,
-        class: "note note-area",
-        placeholder: "Type here..",
-        style: "border:0px;height:100%;width:100%;background-color:transparent",
-        cols: 200,
-        rows: 1
-    });
-
-    var checkbox = $('<input />', {
-        type: "image",
-        class: "note_menu cb note-area",
-        id: "cb" + count,
-        src: "icons/check-box.png",
-        style: "position:relative;margin-left:10px;margin-top:10px;height:20px;"
-    });
-
-    var next = $('<i />', {
-        id: "done" + count,
-        class: "note_menu fa fa-arrow-circle-right done",
-        "input-type": "hidden",
-        style: "position:relative;margin-left:10px;margin-top:10px;font-size:20px;float:right"
-    });
-    mainText.appendTo(contentDiv);
-    checkbox.appendTo(contentDiv);
-    next.appendTo(contentDiv);
-    ($("#note-new")).prepend(contentDiv);
+    console.log('after',$("#content"));
+    $("#cb"+count).hide();
+    ($("#note-new")).prepend(htmlContentDiv);
     count++;
 }
 
@@ -104,77 +62,87 @@ $((function () {
 }));
 
 
-function saveAndDisplay() {
-    $("#done" + (count - 1)).remove();
-    //$("#cb" + (count - 1)).remove();
-    $("#ta" + (count - 1)).attr("cols", 22);
-    $(".ah-cb" + (count - 1)).attr("cols", 22);
-    $("#content" + (count - 1)).removeClass("col-xs-12 col-sm-6 col-md-offset-4 random");
-    var content = $("#content" + (count - 1)).clone();
-    $("#content" + (count - 1)).remove();
+function saveAndDisplay(count) {
+    //console.log("saving",count-1,$("#content"+(count-1)));
+    $("#done" + (count)).remove();
+    $("#cbim" + (count)).remove();
+    $("#text" + (count)).remove();
+    $("#content" + (count)).removeClass("col-xs-12 col-sm-6 col-md-offset-4");
+    $("#content"+count).addClass("col-lg-12");
+    console.log("saveanddisplay",arguments.length);
+    if(arguments.length == 2) {
+        for(var i = 0;i<checkboxElementCount[count];i++){
+            $("#cb" + count+"-"+i).removeClass("col-lg-10");
+            $("#cb" + count+"-"+i).addClass("col-lg-12");
+        }
+    }
+    else{
+        $("#ta"+count).removeClass("col-lg-10");
+        $("#ta"+count).addClass("col-lg-12");
+    }
+    var content = $("#content" + (count)).clone();
+    $("#content" + (count)).remove();
     console.log(content, content.children().length);
-    createNote(content);
+    createNote(content,count);
 }
 
-$(document).on("click", ".done", function () {
-    saveAndDisplay();
+$(document).on("click", ".done", function (e) {
+    var count = $(e.target).attr("id").substr(4);
+    if($("#cb"+count+"-0")) {
+        saveAndDisplay(count, 0);
+    }
+    else saveAndDisplay(count);
 });
 
 $(document).on('click', '.note_menu', function (event) {
     //$(document).off("blur",".access");
-    var el = $(this).attr("id");
-    var addElement, label;
-    //var color = $("#"+count).css("background-color");
+    var el = $(event.target).attr("id");
     if (el.indexOf("dl") != -1) {
         var count = Number(el.substr(2));
         $("#mydiv" + count).remove();
     }
-    if (el.indexOf("cb") != -1) {
-        var count = Number(el.substr(2));
+    if (el.indexOf("cbim") != -1) {
+        var count = Number(el.substr(4));
         console.log(count);
         $("#ta" + count).remove();
-        //$("#cb" + count).remove();
-        addCheckBox(count, 40);
+        $("#cbim" + count).hide();
+        $("#text"+count).show();
+        addCheckBox(count);
     }
+    if(el.indexOf("text") != -1){
+        var count = Number(el.substr(4));
+        $("#content"+count).remove();
+        showMainText();
+    }
+    console.log("click on note_menu",count);
 });
 
-function addCheckBox(count, textareaSize) {
-    var elDiv = $('<div />', {
-        id: "cb" + count + "-" + checkboxElementCount[count],
-        style: "background-color: transparent;display:inline-block"
+function addCheckBox(count) {
+    var elDiv = $("#cb").clone();
+    var toAddInIds = count+"-"+checkboxElementCount[count];
+    elDiv.attr("id",elDiv.attr("id")+toAddInIds);
+    console.log(elDiv.attr("id"));
+    elDiv.children().each(function () {
+        $(this).attr("id",$(this).attr("id")+toAddInIds);
+        console.log($(this).attr("id"));
+        /*
+        if($(this).attr("class").indexOf("cb-ta")!=-1){
+            console.log($(this).attr("class"));
+            $(this).attr("class",$(this).attr("class")+count);
+        }
+        */
     });
-    var addElement = $('<input/>', {
-        type: "checkbox",
-        class: "note-area"
-    });
-
-    var label = $('<textarea/>', {
-        id: "ah-cb" + count + "-" + checkboxElementCount[count],
-        class: "note cb-ta note-area ah-cb" + count,
-        placeholder: "Type here..",
-        rows: 1,
-        cols: textareaSize
-    });
-    var remove = $('<i />', {
-        id: "rem" + count + "-" + checkboxElementCount[count],
-        class: "fa fa-remove note-area",
-        "input-type": "hidden",
-        style: "font-size:20px;display:inline-block;vertical-align:top"
-    });
-    var br = $('<br />', {
-        id: "br" + count + "-" + checkboxElementCount[count]
-    });
+    autosize($('textarea'));
     var done = $("#done" + count).clone();
     $("#done" + count).remove();
-    addElement.appendTo(elDiv);
-    label.appendTo(elDiv);
-    remove.appendTo(elDiv);
+    var text = $("#text" + count).clone();
+    $("#text" + count).remove();
     elDiv.appendTo($("#content" + count));
-    br.appendTo($("#content" + count));
+    //$("<br>").appendTo($("#content" + count));
+    text.appendTo($("#content" + count));
     done.appendTo($("#content" + count));
+    $("#ah-cb"+toAddInIds).focus();
     checkboxElementCount[count]++;
-    label.focus();
-    autosize($('textarea'));
 }
 
 
@@ -183,40 +151,58 @@ $(document).on("mousedown", ".fa-remove", function (e) {
     var dash = x.indexOf('-');
     var arrValue = x.substr(dash + 1);
     var count = x.substr(3, dash - 3);
+    var idSuffix = count + "-" + arrValue;
     console.log(x, dash, arrValue, count);
-    $("#cb" + count + "-" + arrValue).remove();
-    $("#br" + count + "-" + arrValue).remove();
-    if ($("#content" + count).children().length == 1) {
+    $("#cb" + idSuffix).remove();
+    $("#br" + idSuffix).remove();
+    if ($("#content" + count).children().length == 0) {
         console.log($("#mydiv" + count));
         $("#content" + count).remove();
         showMainText();
     }
 });
 
+
+function getCountFromCheckboxEl(id,lengthOfBaseId) {
+    var l = lengthOfBaseId;
+    var pos = id.lastIndexOf("-");
+    var count = Number(id.substr(l,pos-l));
+    console.log("inside checkbox element ",id,l,pos,count);
+    return count;
+}
+
+function getCountFromGenEl(id,lengthOfBaseId) {
+    var l = lengthOfBaseId;
+    return id.substr(l);
+}
+
 //check for command save click on note
 $(document).on("keydown", ".note", function (e) {
-
-    if ((e.metaKey || e.ctrlKey) && e.keyCode == 83 && clickOnElement("note-area")) { /*ctrl+s or command+s*/
+    if ((e.metaKey || e.ctrlKey) && e.keyCode == 83) { /*ctrl+s or command+s*/
 
         var topNote = $(e.target).closest("div").parent();
-        //console.log("command save",topNote.parent());
+        var id = $(e.target).attr("id");
+        var pos = id.lastIndexOf("-");
+        var cElId = id.substr(pos+1);
+        console.log("command save",topNote,topNote.parent());
         e.preventDefault();
-        if (topNote.attr("class") == "row" || topNote.parent().attr("class") == "row") {
-            saveAndDisplay();
+        if (topNote.attr("class") == "row"  ) {
+            var count = getCountFromGenEl(id,2);
+            console.log(count,$("#ta"));
+            saveAndDisplay(count);
+        }
+        else if(topNote.parent().attr("class") == "row"){
+            var count = getCountFromCheckboxEl(id,5);
+            saveAndDisplay(count,cElId);
         }
     }
 });
 
 function returnKeyPressOnCheckBox(e) {
-    var id = $(e.target).attr("id");
-    var col = $(e.target).attr("cols");
-    var x = id.indexOf("-", 3);
-    //console.log("Enter key press",id,window.count,arg,x,col);
-    x = id.substr(5, x - 5);
-    var count = Number(x);
-    //console.log(x,Number(x)+10,checkboxElementCount[count],$("#ah-cb"+count+"-"+(checkboxElementCount[count]-1)).val().length);
-    if (checkboxElementCount[count] != 0 && $("#ah-cb" + count + "-" + (checkboxElementCount[count] - 1)).val().length == 0);
-    else addCheckBox(count, col);
+    var count = getCountFromCheckboxEl($(e.target).attr("id"),5);
+    console.log("returnKeyPressOnCheckBox",count,$(e.target).attr("id"));
+    if (checkboxElementCount[count] != 0 && $("#ah-cb" + count + "-" + (checkboxElementCount[count] - 1)).val() == 0);
+    else addCheckBox(count);
 }
 
 
@@ -244,11 +230,11 @@ function returnKeyPressOnSearch() {
     });
 }
 
-$(document).on("keypress", "#i1", function (e) {
-    if (e.which == 13) {
-        e.preventDefault();
+$(document).on("keyup", "#i1", function (e) {
+    //if (e.which == 13) {
+        //e.preventDefault();
         returnKeyPressOnSearch(e);
-    }
+    //}
 });
 
 //texarea autoresize

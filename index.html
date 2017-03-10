@@ -4,46 +4,108 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <title>Here's My App</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/note.css" rel="stylesheet" type="text/css">
     <link href="css/jquery-ui.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
 
-    <script src = 'js/jquery.js' ></script>
-    <script src = 'js/bootstrap.min.js' ></script>
-    <script src = 'js/jquery-ui.js' ></script>
-    <script src = 'js/autosize.js'></script>
-	<script src = 'js/jquery.live.search.min.js'></script>
-	<script src = 'js/jquery.hideseek.min.js'></script>
+    <script src='js/jquery.js'></script>
+    <script src='js/bootstrap.min.js'></script>
+    <script src='js/jquery-ui.js'></script>
+    <script src='js/autosize.js'></script>
+    <script src='js/jquery.live.search.min.js'></script>
+    <script src='js/jquery.hideseek.min.js'></script>
     <!-- This defines the top navigator -->
-	<div class = "container-fluid" style="background-color:powderblue;font-size: 120%;font-family: 'Font Awesome',Helvetica,Arial,sans-serif;padding-top:20px;padding-bottom: 20px " >
-		<div class = "row" style="align-content: center">
-			<div class = "col-xs-4">
-				<div class = "row" style="align-content: center">
-					<div class = "col-xs-2" style="padding-right:0 !important;">	<input id="inew" type="image" title="Create New Note" style="float:right" align="right" src="icons/new-note.png" height="30"/></div>
-					<div class = "col-xs-4" style="font-family: 'Comic Sans MS', cursive, sans-serif;font-size: 120%;color:#4285F4;text-align: left;padding-right:0 !important;	"> My Notes </div>
-				</div>
-			</div>
-			<div class = "col-xs-8">
-				<div class = "row">
-					<div class = "col-xs-10" style="text-align: left;padding-right: 0 !important"><input class="form-control empty" id=i1 iconified  type="text" style="width:60%;height:30px;float:right" placeholder="&#xF002;" ></div>
-					<div class = "col-xs-1"><i class="fa fa-sticky-note" style="color: blue;font-size: 30px;" aria-hidden="true" ></i></div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container-fluid"
+         style="background-color:powderblue;font-size: 120%;font-family: 'Font Awesome',Helvetica,Arial,sans-serif;padding-top:20px;padding-bottom: 20px ">
+        <div class="row" style="align-content: center">
+            <div class="col-xs-4">
+                <div class="row" style="align-content: center">
+                    <div class="col-xs-2" style="padding-right:0 !important;"><input id="inew" type="image"
+                                                                                     title="Create New Note"
+                                                                                     style="float:right" align="right"
+                                                                                     src="icons/new-note.png"
+                                                                                     height="30"/></div>
+                    <div class="col-xs-4"
+                         style="font-family: 'Comic Sans MS', cursive, sans-serif;font-size: 120%;color:#4285F4;text-align: left;padding-right:0 !important;	">
+                        My Notes
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="row">
+                    <div class="col-xs-10" style="text-align: left;padding-right: 0 !important"><input
+                            class="form-control empty" id=i1 iconified type="text"
+                            style="width:60%;height:30px;float:right" placeholder="&#xF002;"></div>
+                    <div class="col-xs-1"><i class="fa fa-sticky-note" style="color: blue;font-size: 30px;"
+                                             aria-hidden="true"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </head>
 
 
 <body style="background-color: #a9a9a9" class="unknown">
 <div class="container-fluid" style="padding-top: 10px;padding-left: 10px;padding-right: 10px;padding-bottom: 10px">
-	<div class="row" id="note-new"></div>
-	<div class="row" id="myspace">
+    <div class="row" id="note-new"></div>
+    <div class="row" id="myspace">
 
-	</div>
-	<script src = "js/note-script.js" ></script>
+    </div>
+    <script src="js/note-script.js"></script>
+</div>
+<div class="container-fluid" style="display:none">
+    <div class="row">
+        <div class="col-lg-12" id="cb-el">
+
+            <div class="row" style="display: flex;align-items: center;padding:10px;">
+                <div id="cb" class="col-lg-10 row"
+                     style="background-color: transparent;display:flex;align-items: center">
+                    <input type=checkbox class="note-area col-lg-1"/>
+                    <textarea id="ah-cb" class="note cb-ta note-area ah-cb col-lg-10"
+                              placeholder="Type here.." rows="1" width="100%"
+                    ></textarea>
+                    <i id="rem" class="fa fa-remove note-area col-lg-1" input-type="" style="font-size:20px;">
+                    </i>
+                    <p id="br">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-offset-4 content random" id="content"
+             style="display: block;align-items: center;">
+
+            <textarea class="note col-lg-10 note-area"
+                      id="ta"
+                      placeholder="Type here.."
+                      style="border:0px;background-color:transparent;" width="100%"
+                      rows=1></textarea>
+                <i id="cbim" class="note_menu cb note-area fa fa-check-square col-lg-1"
+                   input-type="hidden"
+                   style="font-size:20px;display:flex;align-items: center">
+                </i>
+                <i id="text" class="text note_menu fa fa-file-text col-lg-1"
+                   input-type="hidden"
+                   style="font-size:20px;display:flex;align-items: center">
+                </i>
+                <i id="done"
+                   class="note_menu fa fa-arrow-circle-right done col-lg-1"
+                   input-type="hidden"
+                   style="font-size:20px;display:flex;align-items: center"></i>
+        </div>
+        <div id="mydiv" class="col-xs-12 col-sm-6 col-md-4" style="padding-left:10px;padding-top:10px;display:inline-block">
+            <div class="main-div"
+                 style="display:inline-block;
+                 padding:10px;background-color:blanchedalmond">
+                <i id="dl"
+                   class="note_menu del note-area fa fa-trash-o"
+                   input-type="hidden"
+                   style="font-size:20px;"></i>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

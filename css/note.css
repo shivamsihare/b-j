@@ -27,7 +27,5 @@ input.empty {
 	padding :10px;
 }
 .note_menu{
-	padding-top:0;
-	padding-bottom:0;
-	margin-left:30px;
+	padding-left:30px;
 }
